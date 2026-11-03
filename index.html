@@ -1,0 +1,1168 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>WAKAFROW - Platform Ekosistem Wakaf Produktif & UMKM</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emeraldPrimary: '#126B4F',
+            emeraldHover: '#0e523c',
+            sageSoft: '#D5E9D9',
+            creamBase: '#F7F5EC',
+            goldAccent: '#D9AA57',
+            darkSlate: '#182D24',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Reset & Clean App Viewport (No Background, Native Mobile Feeling) */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    /* Mobile Device Frame - Standard Mobile Resolution without OS Status Bar */
+    .mobile-container {
+      width: 100%;
+      max-width: 412px;
+      height: 100vh;
+      max-height: 890px;
+      background-color: #F7F5EC;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45);
+    }
+    @media (max-width: 480px) {
+      body { background-color: #F7F5EC; }
+      .mobile-container {
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        box-shadow: none;
+      }
+    }
+    /* Hide scrollbars for slick app UI */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .page-screen {
+      flex: 1;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      padding-bottom: 84px;
+    }
+    .page-screen.active {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE CONTAINER (NO BATTERY, NO CLOCK, NO SIGNAL - PURE APP UI) -->
+  <div class="mobile-container">
+
+    <!-- TOP GLOBAL HEADER (Switch Community / UMKM / Nazir) -->
+    <header class="bg-emeraldPrimary text-white px-5 pt-4 pb-3 shadow-md z-30 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-goldAccent flex items-center justify-center font-heading font-extrabold text-white text-base shadow-sm">
+          W
+        </div>
+        <div>
+          <h1 class="font-heading font-bold text-base leading-tight tracking-tight flex items-center gap-1.5">
+            WAKAFROW
+            <span id="roleBadge" class="text-[10px] font-medium bg-white/20 px-2 py-0.5 rounded-full text-sageSoft uppercase tracking-wider">
+              Community
+            </span>
+          </h1>
+          <p class="text-[11px] text-sageSoft/90 leading-none">Grow Together, Empower Waqf</p>
+        </div>
+      </div>
+      
+      <!-- Role Switcher Dropdown Button -->
+      <div class="relative">
+        <button onclick="toggleRoleMenu()" class="text-xs bg-emeraldHover border border-white/20 px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 font-medium hover:bg-white/10 transition">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-goldAccent"></i>
+          <span id="roleLabelText">Mode: Wakif</span>
+          <i data-lucide="chevron-down" class="w-3 h-3 text-sageSoft"></i>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div id="roleDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-100 py-1.5 z-50 text-slate-700 text-xs">
+          <button onclick="switchMode('community')" class="w-full text-left px-3.5 py-2 hover:bg-sageSoft/30 flex items-center gap-2 font-medium">
+            <i data-lucide="heart" class="w-4 h-4 text-emeraldPrimary"></i>
+            WAKAFROW Community
+          </button>
+          <button onclick="switchMode('business')" class="w-full text-left px-3.5 py-2 hover:bg-sageSoft/30 flex items-center gap-2 font-medium">
+            <i data-lucide="briefcase" class="w-4 h-4 text-emeraldPrimary"></i>
+            WAKAFROW Business (UMKM)
+          </button>
+          <button onclick="switchMode('nazir')" class="w-full text-left px-3.5 py-2 hover:bg-sageSoft/30 flex items-center gap-2 font-medium border-t border-gray-100">
+            <i data-lucide="shield-check" class="w-4 h-4 text-goldAccent"></i>
+            Nazir Dashboard
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 1: COMMUNITY - HOME (BERANDA) -->
+    <!-- ======================================================== -->
+    <div id="screen-com-home" class="page-screen active no-scrollbar">
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-b from-emeraldPrimary to-[#1a7f60] text-white px-5 pt-3 pb-6 rounded-b-[28px] shadow-sm">
+        <div class="flex justify-between items-start mb-3">
+          <div>
+            <p class="text-xs text-sageSoft">Assalamu’alaikum,</p>
+            <h2 class="font-heading font-bold text-lg text-white">Muh. Syahril 🌿</h2>
+          </div>
+          <button onclick="navigateTo('screen-com-transparency')" class="bg-white/15 px-3 py-1 rounded-full text-[11px] text-white flex items-center gap-1 border border-white/10">
+            <i data-lucide="shield" class="w-3 h-3 text-goldAccent"></i> Dana Terjaga 100%
+          </button>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 mt-2">
+          <span class="bg-goldAccent/20 text-goldAccent text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+            Islamic Social Finance
+          </span>
+          <p class="font-heading font-bold text-sm text-white mt-1.5 leading-snug">
+            Setiap wakaf produktif menumbuhkan kemandirian ekonomi UMKM.
+          </p>
+          <div class="mt-3 flex gap-2">
+            <button onclick="navigateTo('screen-com-programs')" class="bg-goldAccent hover:bg-amber-600 text-darkSlate text-xs font-bold px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="compass" class="w-3.5 h-3.5"></i> Jelajahi Program
+            </button>
+            <button onclick="navigateTo('screen-com-transparency')" class="bg-white/10 hover:bg-white/20 text-white text-xs font-medium px-3.5 py-2 rounded-xl transition border border-white/20">
+              Audit & Laporan
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards -->
+      <div class="px-5 -mt-3 grid grid-cols-3 gap-2.5 z-10">
+        <div onclick="navigateTo('screen-com-programs')" class="bg-white p-3 rounded-2xl shadow-sm border border-emerald-50 text-center cursor-pointer active:scale-95 transition">
+          <div class="w-9 h-9 mx-auto bg-sageSoft rounded-xl flex items-center justify-center text-emeraldPrimary mb-1.5">
+            <i data-lucide="gift" class="w-5 h-5"></i>
+          </div>
+          <p class="text-[11px] font-bold text-slate-800">Wakaf Cepat</p>
+          <p class="text-[9px] text-slate-400">Pilih Aset</p>
+        </div>
+        <div onclick="navigateTo('screen-com-transparency')" class="bg-white p-3 rounded-2xl shadow-sm border border-emerald-50 text-center cursor-pointer active:scale-95 transition">
+          <div class="w-9 h-9 mx-auto bg-amber-50 rounded-xl flex items-center justify-center text-goldAccent mb-1.5">
+            <i data-lucide="file-check-2" class="w-5 h-5"></i>
+          </div>
+          <p class="text-[11px] font-bold text-slate-800">Transparansi</p>
+          <p class="text-[9px] text-slate-400">Pokok vs Hasil</p>
+        </div>
+        <div onclick="navigateTo('screen-com-impact')" class="bg-white p-3 rounded-2xl shadow-sm border border-emerald-50 text-center cursor-pointer active:scale-95 transition">
+          <div class="w-9 h-9 mx-auto bg-emerald-50 rounded-xl flex items-center justify-center text-emeraldPrimary mb-1.5">
+            <i data-lucide="trending-up" class="w-5 h-5"></i>
+          </div>
+          <p class="text-[11px] font-bold text-slate-800">Dampak Riil</p>
+          <p class="text-[9px] text-slate-400">Indeks Mandiri</p>
+        </div>
+      </div>
+
+      <!-- Realtime Impact Mini Bar -->
+      <div class="px-5 mt-4">
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-emerald-50 rounded-xl text-emeraldPrimary">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-semibold text-gray-400 tracking-wider">Total UMKM Didukung</p>
+              <h4 class="font-heading font-extrabold text-emeraldPrimary text-base">142 Usaha Mandiri</h4>
+            </div>
+          </div>
+          <button onclick="navigateTo('screen-com-impact')" class="text-xs text-emeraldPrimary font-bold flex items-center">
+            Detail <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-0.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Program Unggulan Section -->
+      <div class="px-5 mt-5">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-heading font-bold text-sm text-darkSlate">Program Wakaf Produktif</h3>
+          <button onclick="navigateTo('screen-com-programs')" class="text-xs font-semibold text-emeraldPrimary">Lihat Semua</button>
+        </div>
+
+        <!-- Program Card 1 -->
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-3.5">
+          <div class="relative h-32 bg-slate-200">
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=80" alt="Mesin Produksi" class="w-full h-full object-cover">
+            <span class="absolute top-2.5 left-2.5 bg-emeraldPrimary text-white text-[10px] font-semibold px-2 py-0.5 rounded-md">
+              Fasilitas Mesin
+            </span>
+            <span class="absolute top-2.5 right-2.5 bg-white/90 text-darkSlate text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow-sm">
+              <i data-lucide="map-pin" class="w-2.5 h-2.5 text-emeraldPrimary"></i> Jawa Timur
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h4 class="font-heading font-bold text-sm text-slate-800 leading-snug">Wakaf Mesin Produksi & Pengemas UMKM Pangan</h4>
+            <p class="text-xs text-slate-500 mt-1 line-clamp-2">Penyediaan alat packaging otomatis untuk 18 UMKM olahan pangan lokal binaan Nazir BWI.</p>
+            
+            <div class="mt-3">
+              <div class="flex justify-between text-[11px] font-medium mb-1">
+                <span class="text-slate-500">Terkumpul: <strong class="text-emeraldPrimary">Rp46.500.000</strong></span>
+                <span class="text-emeraldPrimary font-bold">62%</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-emeraldPrimary h-full rounded-full" style="width: 62%"></div>
+              </div>
+              <div class="flex justify-between items-center text-[10px] text-slate-400 mt-1.5">
+                <span>Target: Rp75.000.000</span>
+                <span>Nazir: Lembaga Wakaf Mandiri</span>
+              </div>
+            </div>
+
+            <button onclick="openDonateModal('Wakaf Mesin Produksi & Pengemas UMKM Pangan', 75000000, 46500000)" class="w-full mt-3 bg-emeraldPrimary hover:bg-emeraldHover text-white py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="heart-handshake" class="w-4 h-4 text-goldAccent"></i> Salurkan Wakaf Sekarang
+            </button>
+          </div>
+        </div>
+
+        <!-- Program Card 2 -->
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-3.5">
+          <div class="relative h-32 bg-slate-200">
+            <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=600&auto=format&fit=crop&q=80" alt="Ruang Usaha" class="w-full h-full object-cover">
+            <span class="absolute top-2.5 left-2.5 bg-amber-600 text-white text-[10px] font-semibold px-2 py-0.5 rounded-md">
+              Sentra Ruang Usaha
+            </span>
+            <span class="absolute top-2.5 right-2.5 bg-white/90 text-darkSlate text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 shadow-sm">
+              <i data-lucide="map-pin" class="w-2.5 h-2.5 text-emeraldPrimary"></i> Yogyakarta
+            </span>
+          </div>
+          <div class="p-3.5">
+            <h4 class="font-heading font-bold text-sm text-slate-800 leading-snug">Wakaf Ruang Produksi Bersama UMKM Herbal</h4>
+            <p class="text-xs text-slate-500 mt-1 line-clamp-2">Pembangunan fasilitas sterilisasi dan sertifikasi BPOM halal terpadu.</p>
+            
+            <div class="mt-3">
+              <div class="flex justify-between text-[11px] font-medium mb-1">
+                <span class="text-slate-500">Terkumpul: <strong class="text-emeraldPrimary">Rp98.000.000</strong></span>
+                <span class="text-emeraldPrimary font-bold">81%</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-emeraldPrimary h-full rounded-full" style="width: 81%"></div>
+              </div>
+              <div class="flex justify-between items-center text-[10px] text-slate-400 mt-1.5">
+                <span>Target: Rp120.000.000</span>
+                <span>Nazir: Sinergi Wakaf Nusantara</span>
+              </div>
+            </div>
+
+            <button onclick="openDonateModal('Wakaf Ruang Produksi Bersama UMKM Herbal', 120000000, 98000000)" class="w-full mt-3 bg-emeraldPrimary hover:bg-emeraldHover text-white py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <i data-lucide="heart-handshake" class="w-4 h-4 text-goldAccent"></i> Salurkan Wakaf Sekarang
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 2: COMMUNITY - KATALOG PROGRAM -->
+    <!-- ======================================================== -->
+    <div id="screen-com-programs" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20">
+        <h2 class="font-heading font-bold text-base text-darkSlate mb-2">Katalog Program Wakaf Produktif</h2>
+        <div class="relative">
+          <input type="text" placeholder="Cari mesin, ruang usaha, lokasi..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-emeraldPrimary">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+        </div>
+        
+        <!-- Filter Tabs -->
+        <div class="flex gap-1.5 overflow-x-auto no-scrollbar mt-3 pt-1">
+          <button class="px-3 py-1 bg-emeraldPrimary text-white rounded-lg text-xs font-medium whitespace-nowrap">Semua</button>
+          <button class="px-3 py-1 bg-gray-100 text-slate-600 rounded-lg text-xs font-medium whitespace-nowrap">Fasilitas Mesin</button>
+          <button class="px-3 py-1 bg-gray-100 text-slate-600 rounded-lg text-xs font-medium whitespace-nowrap">Ruang Usaha</button>
+          <button class="px-3 py-1 bg-gray-100 text-slate-600 rounded-lg text-xs font-medium whitespace-nowrap">Pertanian/Pangan</button>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-3">
+        <!-- Program item 1 -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex gap-3">
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300&auto=format&fit=crop&q=80" class="w-20 h-20 rounded-xl object-cover" alt="mesin">
+            <div class="flex-1">
+              <span class="text-[9px] bg-sageSoft text-emeraldPrimary font-bold px-1.5 py-0.5 rounded">Alat Produksi</span>
+              <h4 class="font-heading font-bold text-xs text-slate-800 mt-1">Oven Pengering Keripik Buah Kelompok Tani</h4>
+              <p class="text-[10px] text-slate-400 mt-0.5"><i data-lucide="map-pin" class="w-2.5 h-2.5 inline"></i> Malang, Jawa Timur</p>
+              <div class="mt-2 w-full bg-slate-100 h-1.5 rounded-full">
+                <div class="bg-emeraldPrimary h-full rounded-full" style="width: 45%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] mt-1 text-slate-500 font-medium">
+                <span>Rp18 Jt / Rp40 Jt</span>
+                <span class="text-emeraldPrimary font-bold">45%</span>
+              </div>
+            </div>
+          </div>
+          <button onclick="openDonateModal('Oven Pengering Keripik Buah Kelompok Tani', 40000000, 18000000)" class="w-full mt-2.5 bg-emeraldPrimary hover:bg-emeraldHover text-white py-1.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
+            Wakaf Rp25.000+
+          </button>
+        </div>
+
+        <!-- Program item 2 -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex gap-3">
+            <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=300&auto=format&fit=crop&q=80" class="w-20 h-20 rounded-xl object-cover" alt="sentra">
+            <div class="flex-1">
+              <span class="text-[9px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">Sentra UMKM</span>
+              <h4 class="font-heading font-bold text-xs text-slate-800 mt-1">Dapur Bersama Sertifikasi Halal UMKM Kuliner</h4>
+              <p class="text-[10px] text-slate-400 mt-0.5"><i data-lucide="map-pin" class="w-2.5 h-2.5 inline"></i> Solo, Jawa Tengah</p>
+              <div class="mt-2 w-full bg-slate-100 h-1.5 rounded-full">
+                <div class="bg-emeraldPrimary h-full rounded-full" style="width: 88%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] mt-1 text-slate-500 font-medium">
+                <span>Rp52.8 Jt / Rp60 Jt</span>
+                <span class="text-emeraldPrimary font-bold">88%</span>
+              </div>
+            </div>
+          </div>
+          <button onclick="openDonateModal('Dapur Bersama Sertifikasi Halal UMKM Kuliner', 60000000, 52800000)" class="w-full mt-2.5 bg-emeraldPrimary hover:bg-emeraldHover text-white py-1.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
+            Wakaf Rp25.000+
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 3: COMMUNITY - TRANSPARENCY DASHBOARD -->
+    <!-- ======================================================== -->
+    <div id="screen-com-transparency" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20">
+        <h2 class="font-heading font-bold text-base text-darkSlate">Transparency Dashboard</h2>
+        <p class="text-xs text-slate-500">Akuntabilitas audit syariah: Pokok Wakaf Abadi vs Hasil Pengelolaan.</p>
+      </div>
+
+      <div class="p-4 space-y-4">
+        <!-- Pokok Wakaf Separation Box (Core Sharia Principle) -->
+        <div class="bg-gradient-to-br from-emeraldPrimary to-[#15533f] text-white p-4 rounded-2xl shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] bg-white/20 text-sageSoft px-2 py-0.5 rounded uppercase font-semibold tracking-wider">
+              Pokok Wakaf (Tetap / Abadi)
+            </span>
+            <i data-lucide="lock" class="w-4 h-4 text-goldAccent"></i>
+          </div>
+          <p class="text-xs text-sageSoft">Total Aset Pokok Terhimpun</p>
+          <h3 class="font-heading font-black text-2xl text-white mt-0.5">Rp 1.480.000.000</h3>
+          <p class="text-[10px] text-sageSoft/80 mt-1 border-t border-white/10 pt-1.5">
+            🛡️ Dijaga utuh 100% dalam bentuk mesin produksi, gedung sentra, & instrumen CWLS sukuk.
+          </p>
+        </div>
+
+        <!-- Hasil Pengelolaan Box -->
+        <div class="bg-white p-4 rounded-2xl border border-amber-200/70 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded uppercase font-bold tracking-wider">
+              Hasil Pengelolaan Bersih (Surplus)
+            </span>
+            <i data-lucide="coins" class="w-4 h-4 text-goldAccent"></i>
+          </div>
+          <p class="text-xs text-slate-500">Hasil Siap Disalurkan ke UMKM</p>
+          <h3 class="font-heading font-black text-xl text-amber-700 mt-0.5">Rp 142.350.000</h3>
+          <p class="text-[10px] text-slate-500 mt-1">
+            Digunakan untuk beasiswa inkubasi, subsidi sewa fasilitas, dan pendampingan mentor sertifikasi halal.
+          </p>
+        </div>
+
+        <!-- Breakdown Aset Produktif -->
+        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+          <h4 class="font-heading font-bold text-xs text-darkSlate mb-3 flex items-center justify-between">
+            <span>Alokasi Aset Produktif Berjalan</span>
+            <span class="text-[10px] text-emeraldPrimary font-normal">Audit Q3 2026</span>
+          </h4>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between items-center py-1.5 border-b border-gray-50">
+              <span class="text-slate-600 flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5 text-emeraldPrimary"></i> 48 Unit Mesin Produksi</span>
+              <strong class="text-slate-800">Rp 580.000.000</strong>
+            </div>
+            <div class="flex justify-between items-center py-1.5 border-b border-gray-50">
+              <span class="text-slate-600 flex items-center gap-1.5"><i data-lucide="home" class="w-3.5 h-3.5 text-emeraldPrimary"></i> 4 Sentra Dapur Usaha Bersama</span>
+              <strong class="text-slate-800">Rp 650.000.000</strong>
+            </div>
+            <div class="flex justify-between items-center py-1.5">
+              <span class="text-slate-600 flex items-center gap-1.5"><i data-lucide="landmark" class="w-3.5 h-3.5 text-emeraldPrimary"></i> Penempatan Cash Waqf Sukuk</span>
+              <strong class="text-slate-800">Rp 250.000.000</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dokumen Laporan Nazir -->
+        <div class="bg-sageSoft/30 p-3.5 rounded-2xl border border-sageSoft flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-emeraldPrimary text-white rounded-lg">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-darkSlate">Laporan Keuangan & Audit Nazir</p>
+              <p class="text-[10px] text-slate-500">Periode Terakhir: Oktober 2026 (WTP)</p>
+            </div>
+          </div>
+          <button onclick="alert('Laporan Audit Nazir BWI Periode Oktober 2026 telah diverifikasi Wajar Tanpa Pengecualian (WTP). File PDF dapat diakses publik.')" class="px-2.5 py-1.5 bg-emeraldPrimary text-white rounded-lg text-xs font-bold">
+            Unduh
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 4: COMMUNITY - IMPACT DASHBOARD -->
+    <!-- ======================================================== -->
+    <div id="screen-com-impact" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20">
+        <h2 class="font-heading font-bold text-base text-darkSlate">Impact Dashboard</h2>
+        <p class="text-xs text-slate-500">Pengukuran dampak riil bukan sekadar rupiah terhimpun.</p>
+        
+        <!-- Filter Waktu -->
+        <div class="grid grid-cols-3 gap-2 mt-2">
+          <button class="py-1 text-center bg-gray-100 rounded-lg text-xs font-medium text-slate-600">Bulanan</button>
+          <button class="py-1 text-center bg-emeraldPrimary text-white rounded-lg text-xs font-bold">Triwulanan</button>
+          <button class="py-1 text-center bg-gray-100 rounded-lg text-xs font-medium text-slate-600">Tahunan</button>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-3.5">
+        <!-- 4 Grid Metrik Utama -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-between text-emeraldPrimary mb-1">
+              <i data-lucide="store" class="w-4 h-4"></i>
+              <span class="text-[10px] font-bold text-emeraldPrimary bg-emerald-50 px-1.5 py-0.5 rounded">+18%</span>
+            </div>
+            <h3 class="font-heading font-extrabold text-xl text-slate-800">142</h3>
+            <p class="text-[10px] text-slate-500">UMKM Binaan Aktif</p>
+          </div>
+
+          <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-between text-goldAccent mb-1">
+              <i data-lucide="trending-up" class="w-4 h-4"></i>
+              <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">+46.2%</span>
+            </div>
+            <h3 class="font-heading font-extrabold text-xl text-slate-800">Rp 3.8M</h3>
+            <p class="text-[10px] text-slate-500">Kenaikan Omzet Total</p>
+          </div>
+
+          <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-between text-emeraldPrimary mb-1">
+              <i data-lucide="users-round" class="w-4 h-4"></i>
+              <span class="text-[10px] font-bold text-emeraldPrimary bg-emerald-50 px-1.5 py-0.5 rounded">+84 Org</span>
+            </div>
+            <h3 class="font-heading font-extrabold text-xl text-slate-800">412</h3>
+            <p class="text-[10px] text-slate-500">Tenaga Kerja Terserap</p>
+          </div>
+
+          <div class="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-between text-purple-600 mb-1">
+              <i data-lucide="award" class="w-4 h-4"></i>
+              <span class="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded">Target: 30</span>
+            </div>
+            <h3 class="font-heading font-extrabold text-xl text-slate-800">27</h3>
+            <p class="text-[10px] text-slate-500">UMKM Mandiri / Lulus</p>
+          </div>
+        </div>
+
+        <!-- Cerita Sukses UMKM Binaan -->
+        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+          <h4 class="font-heading font-bold text-xs text-darkSlate mb-2.5">Kisah Kemandirian Terbaru</h4>
+          <div class="flex gap-3">
+            <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=200&auto=format&fit=crop&q=80" class="w-16 h-16 rounded-xl object-cover" alt="Dapur Rasa Ibu">
+            <div>
+              <span class="text-[9px] bg-emerald-50 text-emeraldPrimary font-bold px-1.5 py-0.5 rounded">Dapur Rasa Ibu • Surabaya</span>
+              <p class="text-xs font-semibold text-slate-800 mt-1">"Kapasitas produksi kami naik 400% setelah difasilitasi mesin pengemas otomatis."</p>
+              <p class="text-[10px] text-slate-400 mt-0.5">Omzet meningkat dari Rp8jt/bln menjadi Rp39jt/bln.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 5: UMKM BUSINESS - DASHBOARD UTAMA -->
+    <!-- ======================================================== -->
+    <div id="screen-biz-home" class="page-screen no-scrollbar">
+      <!-- Profile Header -->
+      <div class="bg-emeraldPrimary text-white p-5 rounded-b-[24px]">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white rounded-2xl p-0.5 shadow-sm overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=200&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl" alt="UMKM">
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-heading font-bold text-sm text-white">Dapur Rasa Ibu</h3>
+                <span class="bg-goldAccent text-[9px] text-darkSlate font-bold px-1.5 py-0.2 rounded-full">Terverifikasi</span>
+              </div>
+              <p class="text-xs text-sageSoft">UMKM Olahan Pangan • Surabaya</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAKAFROW Growth Index Card -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/20 mt-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-[10px] text-sageSoft font-medium">WAKAFROW Growth Index</p>
+              <div class="flex items-baseline gap-1 mt-0.5">
+                <span class="font-heading font-black text-2xl text-white">78</span>
+                <span class="text-xs text-sageSoft">/ 100</span>
+                <span class="ml-2 text-[10px] bg-emeraldHover text-sageSoft font-bold px-2 py-0.5 rounded-full border border-sageSoft/30">
+                  Fase: Berkembang
+                </span>
+              </div>
+            </div>
+            <button onclick="navigateTo('screen-biz-growth')" class="text-xs bg-goldAccent hover:bg-amber-600 text-darkSlate px-3 py-1.5 rounded-xl font-bold flex items-center gap-1">
+              Rincian Aspek <i data-lucide="chevron-right" class="w-3 h-3"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-3.5">
+        <!-- Status Program Binaan -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-center text-xs mb-2">
+            <span class="font-heading font-bold text-slate-800">Tahap Inkubasi Usaha</span>
+            <span class="text-emeraldPrimary font-bold">Tahap 2 dari 4</span>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div class="bg-emeraldPrimary h-full rounded-full" style="width: 50%"></div>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-2">Sedang berlangsung: Modul 2 - Financial & Cash Flow Management</p>
+        </div>
+
+        <!-- Fasilitas Diterima Melalui Waqf Asset Matching -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-center mb-2.5">
+            <h4 class="font-heading font-bold text-xs text-darkSlate">Fasilitas Wakaf Terpasang</h4>
+            <button onclick="navigateTo('screen-biz-matching')" class="text-[11px] text-emeraldPrimary font-semibold">+ Ajukan Alat</button>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl text-xs">
+              <div class="flex items-center gap-2">
+                <div class="p-1.5 bg-emerald-100 text-emeraldPrimary rounded-lg"><i data-lucide="box" class="w-4 h-4"></i></div>
+                <div>
+                  <p class="font-bold text-slate-800">Mesin Sealing Otomatis Continuous</p>
+                  <p class="text-[10px] text-slate-400">Status: Aktif Beroperasi • Serial: WKF-2026-081</p>
+                </div>
+              </div>
+              <span class="text-[10px] bg-emerald-50 text-emeraldPrimary font-bold px-2 py-0.5 rounded">Dipinjamkan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Agenda Terjadwal -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <h4 class="font-heading font-bold text-xs text-darkSlate mb-2">Jadwal Mentoring Terdekat</h4>
+          <div class="p-3 bg-amber-50/70 border border-amber-200/60 rounded-xl flex items-start gap-2.5">
+            <i data-lucide="calendar" class="w-4 h-4 text-amber-700 mt-0.5"></i>
+            <div>
+              <p class="text-xs font-bold text-amber-900">Pendampingan Keuangan Syariah Bersama Mentor</p>
+              <p class="text-[11px] text-amber-800/80 mt-0.5">Selasa, 10 November 2026 • 13.30 WIB (Via Zoom & Visit)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 6: UMKM BUSINESS - WAQF ASSET MATCHING -->
+    <!-- ======================================================== -->
+    <div id="screen-biz-matching" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20">
+        <h2 class="font-heading font-bold text-base text-darkSlate">Waqf Asset Matching</h2>
+        <p class="text-xs text-slate-500">Pencocokan kebutuhan alat produktif dengan ketersediaan wakaf nazir.</p>
+      </div>
+
+      <div class="p-4 space-y-3.5">
+        <div class="bg-sageSoft/40 p-3 rounded-xl border border-sageSoft text-xs text-darkSlate flex items-start gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 text-emeraldPrimary mt-0.5"></i>
+          <p>Sistem otomatis mencocokkan profil kapasitas usaha Anda dengan inventaris aset wakaf produktif yang siap didistribusikan.</p>
+        </div>
+
+        <h4 class="font-heading font-bold text-xs text-slate-800">Aset Cocok & Tersedia:</h4>
+
+        <!-- Match Card 1 -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 bg-emerald-50 text-emeraldPrimary rounded-xl flex items-center justify-center font-bold">
+                <i data-lucide="package" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h5 class="font-heading font-bold text-xs text-slate-800">Mesin Vacuum Sealer Industri</h5>
+                <p class="text-[10px] text-slate-400">Pengelola: Lembaga Wakaf Nusantara</p>
+              </div>
+            </div>
+            <span class="text-[10px] bg-emerald-100 text-emeraldPrimary font-bold px-2 py-0.5 rounded-full">
+              Kesesuaian 96%
+            </span>
+          </div>
+          <div class="mt-2.5 text-xs text-slate-600 bg-slate-50 p-2 rounded-xl">
+            <p><strong>Skema:</strong> Pemanfaatan sarana produktif nirlaba (bebas biaya sewa dengan pemeliharaan mandiri & pelaporan bulanan).</p>
+          </div>
+          <button onclick="alert('Pengajuan Pemanfaatan Mesin Vacuum Sealer berhasil dikirim ke Nazir untuk verifikasi berkas!')" class="w-full mt-2.5 bg-emeraldPrimary hover:bg-emeraldHover text-white py-1.5 rounded-xl text-xs font-bold">
+            Ajukan Pemanfaatan Fasilitas
+          </button>
+        </div>
+
+        <!-- Match Card 2 -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 bg-amber-50 text-goldAccent rounded-xl flex items-center justify-center font-bold">
+                <i data-lucide="store" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h5 class="font-heading font-bold text-xs text-slate-800">Ruang Dapur Higienis Bersama</h5>
+                <p class="text-[10px] text-slate-400">Lokasi: Sentra Wakaf Rungkut, Surabaya</p>
+              </div>
+            </div>
+            <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">
+              Kesesuaian 88%
+            </span>
+          </div>
+          <div class="mt-2.5 text-xs text-slate-600 bg-slate-50 p-2 rounded-xl">
+            <p><strong>Skema:</strong> Slot penggunaan ruang produksi higienis tersertifikasi Halal & BPOM 3 hari/minggu.</p>
+          </div>
+          <button onclick="alert('Pengajuan Slot Dapur Higienis telah masuk ke antrean verifikasi Nazir!')" class="w-full mt-2.5 bg-emeraldPrimary hover:bg-emeraldHover text-white py-1.5 rounded-xl text-xs font-bold">
+            Ajukan Slot Ruang Usaha
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 7: UMKM BUSINESS - INKUBASI BISNIS -->
+    <!-- ======================================================== -->
+    <div id="screen-biz-incubation" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20">
+        <h2 class="font-heading font-bold text-base text-darkSlate">Business Incubation</h2>
+        <p class="text-xs text-slate-500">Program pendampingan terstruktur dari modal hingga kemandirian.</p>
+      </div>
+
+      <div class="p-4 space-y-3">
+        <!-- Module 1: Done -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emeraldPrimary flex items-center justify-center font-bold">
+              <i data-lucide="check" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p class="font-heading font-bold text-xs text-slate-800">Modul 1: Standar Mutu & Produksi</p>
+              <p class="text-[10px] text-slate-400">4 Video • 1 Tugas Verifikasi Mesin</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-emeraldPrimary">Selesai</span>
+        </div>
+
+        <!-- Module 2: Active -->
+        <div class="bg-white p-3.5 rounded-2xl border-2 border-emeraldPrimary shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-emeraldPrimary text-white flex items-center justify-center font-bold text-xs">
+                2
+              </div>
+              <div>
+                <p class="font-heading font-bold text-xs text-slate-800">Modul 2: Financial Management</p>
+                <p class="text-[10px] text-slate-400">Pencatatan Buku Kas & Arus Kas Syariah</p>
+              </div>
+            </div>
+            <span class="text-[10px] bg-emerald-50 text-emeraldPrimary font-bold px-2 py-0.5 rounded">Aktif</span>
+          </div>
+          <div class="mt-3 pt-2 border-t border-gray-100 flex justify-between items-center text-xs">
+            <span class="text-slate-500">Progres Modul: 65%</span>
+            <button onclick="alert('Membuka materi pelatihan video Arus Kas UMKM...')" class="bg-emeraldPrimary text-white px-3 py-1 rounded-lg text-xs font-bold">Lanjutkan</button>
+          </div>
+        </div>
+
+        <!-- Module 3: Locked -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 opacity-60 shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs">
+              3
+            </div>
+            <div>
+              <p class="font-heading font-bold text-xs text-slate-800">Modul 3: Marketing & Digital Branding</p>
+              <p class="text-[10px] text-slate-400">Marketplace onboarding, foto produk, katalog</p>
+            </div>
+          </div>
+          <i data-lucide="lock" class="w-4 h-4 text-slate-400"></i>
+        </div>
+
+        <!-- Module 4: Locked -->
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 opacity-60 shadow-sm flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xs">
+              4
+            </div>
+            <div>
+              <p class="font-heading font-bold text-xs text-slate-800">Modul 4: Business Sustainability & Legalitas</p>
+              <p class="text-[10px] text-slate-400">Kemandirian modal, sertifikat Halal BPOM & NIB</p>
+            </div>
+          </div>
+          <i data-lucide="lock" class="w-4 h-4 text-slate-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 8: UMKM BUSINESS - MARKET CONNECT -->
+    <!-- ======================================================== -->
+    <div id="screen-biz-market" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20">
+        <h2 class="font-heading font-bold text-base text-darkSlate">Market Connect</h2>
+        <p class="text-xs text-slate-500">Membuka akses pasar B2B, pameran, dan kemitraan ritel.</p>
+      </div>
+
+      <div class="p-4 space-y-3.5">
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <span class="text-[9px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">Peluang B2B Buka</span>
+          <h4 class="font-heading font-bold text-xs text-slate-800 mt-1.5">Pengadaan Suplai Katering Lembaga BWI & Kemenag</h4>
+          <p class="text-xs text-slate-500 mt-1">Dibutuhkan 500 pack/minggu camilan olahan pangan sehat terstandar izin edar.</p>
+          <div class="mt-2.5 flex justify-between items-center pt-2 border-t border-gray-100">
+            <span class="text-[11px] text-emeraldPrimary font-bold">Kriteria: Nilai Index > 75</span>
+            <button onclick="alert('Profil Dapur Rasa Ibu telah dikirimkan ke panitia kurasi pengadaan!')" class="bg-emeraldPrimary text-white px-3 py-1 rounded-lg text-xs font-bold">Daftar Mitra</button>
+          </div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <span class="text-[9px] bg-emerald-100 text-emeraldPrimary font-bold px-2 py-0.5 rounded">Bazar Syariah 2026</span>
+          <h4 class="font-heading font-bold text-xs text-slate-800 mt-1.5">Booth Gratis Islamic Economic Festival di Grand City</h4>
+          <p class="text-xs text-slate-500 mt-1">Fasilitas booth pameran gratis dari surplus wakaf produktif untuk 10 UMKM unggulan.</p>
+          <div class="mt-2.5 flex justify-between items-center pt-2 border-t border-gray-100">
+            <span class="text-[11px] text-slate-400">Batas: 15 Nov 2026</span>
+            <button onclick="alert('Permintaan keikutsertaan booth pameran telah diajukan!')" class="bg-emeraldPrimary text-white px-3 py-1 rounded-lg text-xs font-bold">Ambil Slot</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 9: UMKM BUSINESS - GROWTH INDEX BREAKDOWN -->
+    <!-- ======================================================== -->
+    <div id="screen-biz-growth" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20 flex items-center gap-2">
+        <button onclick="navigateTo('screen-biz-home')" class="p-1 text-slate-600"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+        <div>
+          <h2 class="font-heading font-bold text-sm text-darkSlate">Rincian WAKAFROW Growth Index</h2>
+          <p class="text-[10px] text-slate-400">Total Skor: 78/100 (Kategori: Berkembang)</p>
+        </div>
+      </div>
+
+      <div class="p-4 space-y-3">
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="font-semibold text-slate-700">Pertumbuhan Usaha (Bobot 25%)</span>
+            <strong class="text-emeraldPrimary">85 / 100</strong>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div class="bg-emeraldPrimary h-full rounded-full" style="width: 85%"></div>
+          </div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="font-semibold text-slate-700">Kemandirian Keuangan (Bobot 25%)</span>
+            <strong class="text-emeraldPrimary">70 / 100</strong>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div class="bg-emeraldPrimary h-full rounded-full" style="width: 70%"></div>
+          </div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="font-semibold text-slate-700">Kapasitas Produksi (Bobot 20%)</span>
+            <strong class="text-emeraldPrimary">80 / 100</strong>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div class="bg-emeraldPrimary h-full rounded-full" style="width: 80%"></div>
+          </div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="font-semibold text-slate-700">Kualitas Manajemen (Bobot 15%)</span>
+            <strong class="text-emeraldPrimary">75 / 100</strong>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div class="bg-emeraldPrimary h-full rounded-full" style="width: 75%"></div>
+          </div>
+        </div>
+
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-center text-xs mb-1">
+            <span class="font-semibold text-slate-700">Keberlanjutan Usaha (Bobot 15%)</span>
+            <strong class="text-emeraldPrimary">75 / 100</strong>
+          </div>
+          <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div class="bg-emeraldPrimary h-full rounded-full" style="width: 75%"></div>
+          </div>
+        </div>
+
+        <button onclick="navigateTo('screen-biz-home')" class="w-full bg-emeraldPrimary text-white py-2 rounded-xl text-xs font-bold mt-2">
+          Kembali ke Dashboard Usaha
+        </button>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SCREEN 10: NAZIR MANAGEMENT DASHBOARD VIEW -->
+    <!-- ======================================================== -->
+    <div id="screen-nazir" class="page-screen no-scrollbar">
+      <div class="bg-white p-4 border-b border-gray-100 sticky top-0 z-20">
+        <h2 class="font-heading font-bold text-base text-darkSlate">Nazir Administrator Console</h2>
+        <p class="text-xs text-slate-500">Verifikasi, penetapan alokasi, dan tata kelola kepatuhan syariah.</p>
+      </div>
+
+      <div class="p-4 space-y-3.5">
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-white p-3 rounded-xl border border-gray-100">
+            <p class="text-[10px] text-slate-400">Antrean Verifikasi</p>
+            <h4 class="font-heading font-bold text-lg text-emeraldPrimary">6 UMKM</h4>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-gray-100">
+            <p class="text-[10px] text-slate-400">Aset Wakaf Siap Match</p>
+            <h4 class="font-heading font-bold text-lg text-goldAccent">14 Unit</h4>
+          </div>
+        </div>
+
+        <h4 class="font-heading font-bold text-xs text-slate-800">Permohonan Menunggu Keputusan Nazir:</h4>
+
+        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <h5 class="font-bold text-xs text-slate-800">Keripik Tempe Barokah</h5>
+              <p class="text-[10px] text-slate-400">Ngawi • Kebutuhan: Mesin Spinner Minyak</p>
+            </div>
+            <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded">Perlu Verifikasi</span>
+          </div>
+          <p class="text-[11px] text-slate-600 mt-2">Kelayakan usaha dinilai 81/100 berdasarkan data survei lapangan tim pendamping.</p>
+          <div class="mt-3 flex gap-2">
+            <button onclick="alert('Permohonan UMKM Barokah Disetujui & Ditetapkan Alokasi Aset!')" class="flex-1 bg-emeraldPrimary text-white py-1.5 rounded-lg text-xs font-bold">Setujui Alokasi</button>
+            <button onclick="alert('Permintaan revisi berkas telah dikirimkan ke calon UMKM penerima.')" class="px-3 bg-gray-100 text-slate-600 py-1.5 rounded-lg text-xs font-medium">Tinjau Ulang</button>
+          </div>
+        </div>
+
+        <button onclick="switchMode('community')" class="w-full bg-slate-800 text-white py-2 rounded-xl text-xs font-bold mt-3">
+          Kembali ke Tampilan Utama
+        </button>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- BOTTOM NAVIGATION BAR (COMMUNITY MODE) -->
+    <!-- ======================================================== -->
+    <nav id="nav-community" class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-3 py-2 flex justify-around items-center z-30 shadow-lg">
+      <button onclick="navigateTo('screen-com-home')" class="nav-btn active flex flex-col items-center text-emeraldPrimary">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Beranda</span>
+      </button>
+      <button onclick="navigateTo('screen-com-programs')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-emeraldPrimary">
+        <i data-lucide="compass" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Program</span>
+      </button>
+      <button onclick="navigateTo('screen-com-transparency')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-emeraldPrimary">
+        <i data-lucide="shield-check" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Transparansi</span>
+      </button>
+      <button onclick="navigateTo('screen-com-impact')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-emeraldPrimary">
+        <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Dampak</span>
+      </button>
+      <button onclick="switchMode('business')" class="nav-btn flex flex-col items-center text-slate-400 hover:text-goldAccent">
+        <i data-lucide="store" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">UMKM Mode</span>
+      </button>
+    </nav>
+
+    <!-- ======================================================== -->
+    <!-- BOTTOM NAVIGATION BAR (BUSINESS / UMKM MODE) -->
+    <!-- ======================================================== -->
+    <nav id="nav-business" class="hidden absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-3 py-2 flex justify-around items-center z-30 shadow-lg">
+      <button onclick="navigateTo('screen-biz-home')" class="nav-btn-biz active flex flex-col items-center text-emeraldPrimary">
+        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Dashboard</span>
+      </button>
+      <button onclick="navigateTo('screen-biz-matching')" class="nav-btn-biz flex flex-col items-center text-slate-400 hover:text-emeraldPrimary">
+        <i data-lucide="git-merge" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Fasilitas</span>
+      </button>
+      <button onclick="navigateTo('screen-biz-incubation')" class="nav-btn-biz flex flex-col items-center text-slate-400 hover:text-emeraldPrimary">
+        <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Inkubasi</span>
+      </button>
+      <button onclick="navigateTo('screen-biz-market')" class="nav-btn-biz flex flex-col items-center text-slate-400 hover:text-emeraldPrimary">
+        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Pasar</span>
+      </button>
+      <button onclick="switchMode('community')" class="nav-btn-biz flex flex-col items-center text-slate-400 hover:text-emeraldPrimary">
+        <i data-lucide="arrow-left-right" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Wakif Mode</span>
+      </button>
+    </nav>
+
+    <!-- ======================================================== -->
+    <!-- MODAL POPUP: ALUR WAKAF TUNAI PRODUKTIF & IKRAR -->
+    <!-- ======================================================== -->
+    <div id="donateModal" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center">
+      <div class="bg-white w-full rounded-t-[28px] p-5 max-h-[92%] overflow-y-auto no-scrollbar shadow-2xl">
+        <div class="flex justify-between items-center mb-3">
+          <span class="text-[10px] bg-sageSoft text-emeraldPrimary font-bold px-2 py-0.5 rounded-full">
+            Wakaf Produktif Berkelanjutan
+          </span>
+          <button onclick="closeDonateModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <h3 id="modalProgramTitle" class="font-heading font-bold text-sm text-slate-800 leading-snug">
+          Program Wakaf Mesin Produksi
+        </h3>
+
+        <!-- Pilihan Nominal -->
+        <p class="text-xs font-semibold text-slate-700 mt-3 mb-2">Pilih Nominal Wakaf Uang (Pokok Terjaga):</p>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button onclick="selectAmount(25000)" class="amount-btn py-2 px-3 border border-emeraldPrimary bg-emerald-50 text-emeraldPrimary font-bold rounded-xl text-center">Rp 25.000</button>
+          <button onclick="selectAmount(50000)" class="amount-btn py-2 px-3 border border-gray-200 text-slate-700 font-semibold rounded-xl text-center">Rp 50.000</button>
+          <button onclick="selectAmount(100000)" class="amount-btn py-2 px-3 border border-gray-200 text-slate-700 font-semibold rounded-xl text-center">Rp 100.000</button>
+          <button onclick="selectAmount(250000)" class="amount-btn py-2 px-3 border border-gray-200 text-slate-700 font-semibold rounded-xl text-center">Rp 250.000</button>
+        </div>
+
+        <div class="mt-2.5">
+          <input id="customAmountInput" type="number" placeholder="Nominal lainnya (Rp)" class="w-full px-3 py-2 bg-slate-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-emeraldPrimary">
+        </div>
+
+        <!-- Ketentuan & Ikrar Digital Syariah -->
+        <div class="mt-3 p-3 bg-amber-50 rounded-xl border border-amber-200 text-[11px] text-amber-900 leading-relaxed">
+          <p class="font-bold mb-1 flex items-center gap-1">
+            <i data-lucide="scroll-text" class="w-3.5 h-3.5"></i> Ikrar Wakaf Uang Digital:
+          </p>
+          "Saya berniat mewakafkan sejumlah dana ini demi kemaslahatan produktif UMKM umat, di mana pokok wakaf dikelola kekal oleh Nazir terdaftar BWI dan manfaatnya disalurkan berkelanjutan."
+        </div>
+
+        <!-- Metode Pembayaran -->
+        <p class="text-xs font-semibold text-slate-700 mt-3 mb-1.5">Pilih Metode:</p>
+        <div class="flex gap-2">
+          <label class="flex-1 border border-emeraldPrimary bg-emerald-50/50 p-2 rounded-xl flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-800">
+            <input type="radio" name="payment" checked class="text-emeraldPrimary"> QRIS Syariah Instant
+          </label>
+          <label class="flex-1 border border-gray-200 p-2 rounded-xl flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-800">
+            <input type="radio" name="payment" class="text-emeraldPrimary"> Virtual Account BSI
+          </label>
+        </div>
+
+        <!-- Tombol Konfirmasi -->
+        <button onclick="processWaqfPayment()" class="w-full mt-4 bg-emeraldPrimary hover:bg-emeraldHover text-white py-3 rounded-2xl text-xs font-heading font-bold shadow-md flex items-center justify-center gap-2">
+          <i data-lucide="check-circle" class="w-4 h-4 text-goldAccent"></i> Konfirmasi & Salurkan Wakaf
+        </button>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL POPUP: BUKTI / SERTIFIKAT IKRAR SUKSES -->
+    <!-- ======================================================== -->
+    <div id="receiptModal" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-5">
+      <div class="bg-white w-full max-w-sm rounded-3xl p-5 text-center shadow-2xl border border-gray-100">
+        <div class="w-14 h-14 bg-emerald-100 text-emeraldPrimary rounded-full mx-auto flex items-center justify-center mb-3">
+          <i data-lucide="badge-check" class="w-8 h-8 text-emeraldPrimary"></i>
+        </div>
+        <span class="text-[10px] bg-goldAccent text-darkSlate font-bold px-2 py-0.5 rounded-full uppercase">
+          Alhamdulillah Terverifikasi
+        </span>
+        <h3 class="font-heading font-bold text-base text-slate-800 mt-2">Akta Ikrar Wakaf Elektronik</h3>
+        <p class="text-xs text-slate-500 mt-1">Nomor Registrasi: <strong>AIW-BWI/2026/09182</strong></p>
+
+        <div class="my-4 p-3 bg-slate-50 rounded-2xl border border-gray-200 text-left text-xs space-y-1.5">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Nama Wakif:</span>
+            <span class="font-bold text-slate-800">Muh. Syahril</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Nominal Pokok:</span>
+            <span id="receiptAmount" class="font-bold text-emeraldPrimary text-sm">Rp 25.000</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Peruntukan:</span>
+            <span class="font-bold text-slate-800">Fasilitas Mesin UMKM</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Nazir Pengelola:</span>
+            <span class="font-bold text-slate-800">Lembaga Wakaf Mandiri</span>
+          </div>
+        </div>
+
+        <button onclick="closeReceiptModal()" class="w-full bg-emeraldPrimary text-white py-2.5 rounded-xl text-xs font-bold shadow">
+          Selesai & Pantau Transparansi
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT LOGIKA NAVIGASI & INTERAKSI LENGKAP -->
+  <script>
+    // Inisialisasi ikon Lucide
+    lucide.createIcons();
+
+    // Fungsi Navigasi Layar (Screen Navigator)
+    function navigateTo(screenId) {
+      document.querySelectorAll('.page-screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) {
+        targetScreen.classList.add('active');
+        targetScreen.scrollTop = 0;
+      }
+
+      // Update styling bottom navigation tab
+      updateNavHighlight(screenId);
+    }
+
+    function updateNavHighlight(screenId) {
+      document.querySelectorAll('.nav-btn, .nav-btn-biz').forEach(btn => {
+        btn.classList.remove('text-emeraldPrimary');
+        btn.classList.add('text-slate-400');
+      });
+      
+      // Auto highlight matching buttons
+      if (screenId.includes('com-home')) highlightBtn(0);
+      else if (screenId.includes('com-programs')) highlightBtn(1);
+      else if (screenId.includes('com-transparency')) highlightBtn(2);
+      else if (screenId.includes('com-impact')) highlightBtn(3);
+    }
+
+    function highlightBtn(index) {
+      const btns = document.querySelectorAll('#nav-community .nav-btn');
+      if (btns[index]) {
+        btns[index].classList.remove('text-slate-400');
+        btns[index].classList.add('text-emeraldPrimary');
+      }
+    }
+
+    // Toggle Role Dropdown
+    function toggleRoleMenu() {
+      const dropdown = document.getElementById('roleDropdown');
+      dropdown.classList.toggle('hidden');
+    }
+
+    // Ganti Mode Antarmuka: Community vs Business (UMKM) vs Nazir
+    function switchMode(mode) {
+      document.getElementById('roleDropdown').classList.add('hidden');
+      const roleBadge = document.getElementById('roleBadge');
+      const roleLabelText = document.getElementById('roleLabelText');
+      const navCommunity = document.getElementById('nav-community');
+      const navBusiness = document.getElementById('nav-business');
+
+      if (mode === 'community') {
+        roleBadge.innerText = 'Community';
+        roleLabelText.innerText = 'Mode: Wakif';
+        navCommunity.classList.remove('hidden');
+        navBusiness.classList.add('hidden');
+        navigateTo('screen-com-home');
+      } else if (mode === 'business') {
+        roleBadge.innerText = 'UMKM Mitra';
+        roleLabelText.innerText = 'Mode: Usaha';
+        navCommunity.classList.add('hidden');
+        navBusiness.classList.remove('hidden');
+        navigateTo('screen-biz-home');
+      } else if (mode === 'nazir') {
+        roleBadge.innerText = 'Nazir Admin';
+        roleLabelText.innerText = 'Mode: Nazir';
+        navCommunity.classList.add('hidden');
+        navBusiness.classList.add('hidden');
+        navigateTo('screen-nazir');
+      }
+    }
+
+    // Modal Donasi Wakaf
+    let selectedDonationAmount = 25000;
+
+    function openDonateModal(title, target, current) {
+      document.getElementById('modalProgramTitle').innerText = title;
+      document.getElementById('donateModal').classList.remove('hidden');
+    }
+
+    function closeDonateModal() {
+      document.getElementById('donateModal').classList.add('hidden');
+    }
+
+    function selectAmount(amt) {
+      selectedDonationAmount = amt;
+      document.getElementById('customAmountInput').value = '';
+      document.querySelectorAll('.amount-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-50', 'text-emeraldPrimary', 'border-emeraldPrimary', 'font-bold');
+        btn.classList.add('border-gray-200', 'text-slate-700');
+      });
+      event.target.classList.add('bg-emerald-50', 'text-emeraldPrimary', 'border-emeraldPrimary', 'font-bold');
+    }
+
+    function processWaqfPayment() {
+      const customVal = document.getElementById('customAmountInput').value;
+      if (customVal && Number(customVal) > 0) {
+        selectedDonationAmount = Number(customVal);
+      }
+      closeDonateModal();
+      
+      // Buka receipt modal
+      document.getElementById('receiptAmount').innerText = 'Rp ' + selectedDonationAmount.toLocaleString('id-ID');
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.add('hidden');
+      navigateTo('screen-com-transparency');
+    }
+
+    // Close modal when tapping background
+    window.onclick = function(event) {
+      const donateModal = document.getElementById('donateModal');
+      const dropdown = document.getElementById('roleDropdown');
+      if (event.target === donateModal) {
+        closeDonateModal();
+      }
+      if (!event.target.closest('#roleBadge') && !event.target.closest('#roleLabelText') && !event.target.closest('#roleDropdown') && !event.target.closest('button[onclick="toggleRoleMenu()"]')) {
+        dropdown.classList.add('hidden');
+      }
+    };
+  </script>
+</body>
+</html>
